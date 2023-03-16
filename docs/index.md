@@ -562,18 +562,18 @@ Any site using Dawn has a subset of rules that may overwrite the rules set above
 
 Dawn uses a component based stylesheet setup. This means that rather than a single large stylesheet, Dawn has numerous stylesheets, all with a few lines of CSS. The stylesheets are then only loaded in where that component is loaded
 
-- Inside a section, there will be a `{% style %}` tag. If you are adding less than 10 lines of CSS, it can go within the style tag.
+- Inside a section, there will be a `style` tag. If you are adding less than 10 lines of CSS, it can go within the style tag.
 
-- Once the custom styles in `{% style %}` add up to more than 10 lines, the entire custom CSS for that section must be moved into a custom CSS file, which is loaded into that section.
+- Once the custom styles in `style` add up to more than 10 lines, the entire custom CSS for that section must be moved into a custom CSS file, which is loaded into that section.
 
 
 ### JS
 
 Dawn uses a component based JS setup. This means that rather than a single large JS file, Dawn has numerous JS files, all with a few lines of JS. The JS files are then only loaded in where that section is loaded
 
-- Inside a section, there will be a `{% javascript %}` tag. If you are adding less than 10 lines of JS, it can go within the javascript tag.
+- Inside a section, there will be a `javascript` tag. If you are adding less than 10 lines of JS, it can go within the javascript tag.
 
-- Once the custom JS in `{% javascript %}` add up to more than 10 lines, the entire custom JS for that section must be moved into a custom JS file, which is loaded into that section.
+- Once the custom JS in `javascript` add up to more than 10 lines, the entire custom JS for that section must be moved into a custom JS file, which is loaded into that section.
 
 ***
 
