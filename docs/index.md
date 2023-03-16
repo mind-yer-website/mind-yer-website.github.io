@@ -29,13 +29,27 @@ When considering coding standards we're more interested in **consistency** than 
 
 ### Testing and QA should find no problems
 
-==VERY IMPORTANT! Remember this above all else==
+==
+VERY IMPORTANT! Remember this above all else
+==
 
 - Code is a craft - make it your responsibility to ensure it is the best it can be; that it's tested, bug free, and adheres to these guidelines. Testing and QA folks aren't responsible for quality - developers are.
 
 - Don't use testers as bug catchers - testers should find no problems after you have committed your code.  When testers find bugs, tickets need to be opened, developers assigned and scheduled in to fix the problem.  This lengthens the time it takes from identifying to resolving a bug.
 
 - Make sure, as much as possible, you have tested your code on a reasonable number of devices so you can catch problems before you commit to the repo.
+
+
+### Design
+
+We dont provide designs for all projects, however, when we do, they have been viewed and approved by the client, meaning the work we produce must match that design
+
+We are never going to a build pixel perfect against a design, its just not realistic, however, it needs to be as close as possible.
+
+When you have been provided a design, part of your testing must be to compare the work you have done aginst that design.
+
+To do this, get the design and build up side by side, and visually compare between the two. 
+
 
 ### Don't Repeat Yourself (DRY)
 
@@ -217,6 +231,18 @@ CSS should be modular and reusable. Its always best to extend off the existing c
   }
   ```
 
+### Inline CSS
+Never never never use inline CSS. Its lazy and theres no reason to use it.
+
+Add or use an existing class on the element, and add the styles to a css file
+
+
+### Dont edit, override
+
+Dont edit existing styles on a site e.g. theme.css. Editing the existing styles makes it hard to upgrade the theme in future, makes it harder to debug and get assistance from the theme developers
+
+Instead, and custom styles should be put into a 'custom' css file, which overwrites the exiting styles. Doing this means we can keep the integrity of the existing theme, and if needed, can remove the custom styles
+
 ### Depth of applicability
 
 Don't over-specify CSS selectors. Overly specified selectors are difficult to understand and lead to subsequent selectors needing to be of an even higher specificity. (See SMACSS' [depth of applicability](http://smacss.com/book/applicability)):
@@ -249,13 +275,13 @@ Use comments to:
     ```
 ### Unit sizing
 
-Use `rem`s to size fonts. These will take into account the user's font size setting ([this research from 2006 suggests around 10% of people have changed it](http://archive.oreilly.com/pub/post/more_statistics_on_user_clicks.html)). 
+- Use `rem`s to size fonts. These will take into account the user's font size setting ([this research from 2006 suggests around 10% of people have changed it](http://archive.oreilly.com/pub/post/more_statistics_on_user_clicks.html)). 
 
-Use unitless line-heights.
+- Use unitless line-heights.
 
-Use flexbox to create layouts and grids
+- Use flexbox to create layouts and grids
 
-Use `pixels` to specify the following properties unless percentages make sense (but as above, exercise good judgement): `margin`, `padding`, `top`, `left`, `bottom`, `right`.
+- Use `pixels` to specify the following properties unless percentages make sense (but as above, exercise good judgement): `margin`, `padding`, `top`, `left`, `bottom`, `right`.
 
 ```
 //  This makes sense
@@ -392,7 +418,7 @@ The presence of the attribute itself implies that the value is "true", an absenc
 
 - Use quotation marks consistently, e.g. only use single or double quotes throughout your code, don't mix. Unless there is a valid reason not to, prefer single quotes such that HTML contained therein does not need to be escaped. For example:
 
-      ```
+    ```
     // good...
     const foo = 'Just a normal string'
 
@@ -401,7 +427,6 @@ The presence of the attribute itself implies that the value is "true", an absenc
 
     // not good...
     const foo = "<a href=\"/bar\">HTML string with escaped double quotes</a>"
-
     ```
 
 - Use `event.preventDefault()` instead of `return false` to prevent default event actions. Returning a boolean value is semantically incorrect when considering the context is an event.
@@ -468,11 +493,11 @@ Configuration objects:
 
 ### Naming conventions
 
-Use descriptive yet concise variable names for long-lived variables e.g. `customer_name`
+- Use descriptive yet concise variable names for long-lived variables e.g. `customer_name`
 
-Avoid using what might be considered reserved variable names out of context.  For example, `e` in javascript is considered an event object.  Don't use it for anything else.
+- Avoid using what might be considered reserved variable names out of context.  For example, `e` in javascript is considered an event object.  Don't use it for anything else.
 
-For temporary variables, i.e. those which are used to store short-lived values, e.g. variables used for iteration, it is ok to use non-descriptive names, e.g. `i, j, k`.
+- For temporary variables, i.e. those which are used to store short-lived values, e.g. variables used for iteration, it is ok to use non-descriptive names, e.g. `i, j, k`.
 
 ### Commenting
 
@@ -515,17 +540,61 @@ Where applicable, ensure code is written on separate lines to aid Git diffs and 
 
 ***
 
-- Seperate into HTML, CSS, JS
-- Dont edit existing styles, overwrite so can be easily removed in future if needed
-- Never use inline styles. Styles should always go into a CSS file ( or if using Dawn, less than 3 styles can go into the "styles" block )
+# Shopify
+
+## General Shopify
+
+- Shopify runs on a CDN, meaning the link to assets, images etc WILL change. As such, never hardcode URL's for assets. Use the liquid helpers available, such as `{{ 'FILE NAME' | asset_url }}`
+
+- Shopify has 2 locations for asset storage. Files & Theme assets. They are two different locations for good reason:
+  
+  - Theme Assets - Only to be used for assets that are specific and generic to the theme i.e not content. This could be things like account icons, menu icon, css
+
+  - File Storage - used for content based assets such as company logos, PDFs, text files, product images etc
+
+The best way to think about it is, if you were to take this theme, and transfer it to a totally different client, would they want that asset in their theme ( icons => Yes, Logo => No )
+
+## Dawn
+
+Any site using Dawn has a subset of rules that may overwrite the rules set above. This is because of how Dawn is built, it allows for certain rules to be modified
+
+### CSS
+
+Dawn uses a component based stylesheet setup. This means that rather than a single large stylesheet, Dawn has numerous stylesheets, all with a few lines of CSS. The stylesheets are then only loaded in where that component is loaded
+
+- Inside a section, there will be a `{% style %}` tag. If you are adding less than 10 lines of CSS, it can go within the style tag.
+
+- Once the custom styles in `{% style %}` add up to more than 10 lines, the entire custom CSS for that section must be moved into a custom CSS file, which is loaded into that section.
+
+
+### JS
+
+Dawn uses a component based JS setup. This means that rather than a single large JS file, Dawn has numerous JS files, all with a few lines of JS. The JS files are then only loaded in where that section is loaded
+
+- Inside a section, there will be a `{% javascript %}` tag. If you are adding less than 10 lines of JS, it can go within the javascript tag.
+
+- Once the custom JS in `{% javascript %}` add up to more than 10 lines, the entire custom JS for that section must be moved into a custom JS file, which is loaded into that section.
+
+***
+
+# Version Control
+
+All coding done at MYW must be done under Version Control
+
+We use GitHub as our chosen VS system, as it has a native integration with Shopify
+
+- Github 
+  - Different edits to be done as different commits
+  - Each card on Trello is a seperate branch. 1 branch per card
+
+# Testing
 - Proper testing - Check changes havnt affected anything else
   - Browser testign
   - What areas might your code have affected
   - Check other elements that dont comply e.g. if you add/edit a metafield on the PDP, make sure to check products which dont have that metafield to make sure it still works
   - Test all work in https://www.lambdatest.com/. Test latest versions of Chrome, IE, FF, Safari
-- Where a design is provided, testing needs to be done to check that the work you have done matches that design as closely as possible
-- Shopify specific rules
-- Github 
-  - Different edits to be done as different commits
-  - Each card on Trello is a seperate branch. 1 branch per card
 
+# Coding Tools
+
+  - VS - Has a bunch of native Shopify tools such as linting, code compeltion etc
+  - Shopify CLI - No longer use ThemeKit
