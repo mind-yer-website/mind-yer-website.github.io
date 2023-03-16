@@ -29,35 +29,13 @@ When considering coding standards we're more interested in **consistency** than 
 
 ### Testing and QA should find no problems
 
-==
+== VERY IMPORTANT! Remember this above all else==
+
 - Code is a craft - make it your responsibility to ensure it is the best it can be; that it's tested, bug free, and adheres to these guidelines. Testing and QA folks aren't responsible for quality - developers are.
 
 - Don't use testers as bug catchers - testers should find no problems after you have committed your code.  When testers find bugs, tickets need to be opened, developers assigned and scheduled in to fix the problem.  This lengthens the time it takes from identifying to resolving a bug.
 
 - Make sure, as much as possible, you have tested your code on a reasonable number of devices so you can catch problems before you commit to the repo.
-==
-
-### You are producing source code
-
-Due to the size of most webdev projects that cxpartners undertakes, and the processes and methodologies we adhere to, there will always be a build process that takes source code and generates built artefacts.
-
-For example:
-
-- SCSS will be compiled to minified and concatenated CSS
-
-- template files will be rendered to HTML
-
-- HTML will be beautified, stripped of comments and references to CSS and JS changed to minified and concatenated versions
-
-- Javascript with be minified and concatenated
-
-This means:
-
-- Don't check generated files into the repo, e.g. CSS files when using SASS
-
-- Always check in configuration files for the tools that you use, e.g. `config.rb` for Compass, `mixture.json` for Mixture.io app
-
-- When including CSS and JS reference the non-minified versions
 
 ### Don't Repeat Yourself (DRY)
 
@@ -75,7 +53,7 @@ Separate *structure* from *presentation* from *behaviour* to aid maintainability
 
 - Avoid writing CSS or HTML in Javascript
 
-- Don't choose HTML elements to imply style
+- Don't choose HTML elements to imply style e.g. <b>, <i> etc
 
 - Where appropriate, use CSS rather than Javascript for animations and transitions
 
@@ -89,9 +67,9 @@ Follow the principles of ['Keep It Simple, Stupid'](http://en.wikipedia.org/wiki
 
 ### Commenting
 
-Explain design or architectural decisions that cannot be conveyed in code alone by adding comments to your code.
+Your code should be easy to read and understand on its own, but its also important to comment your code.
 
-Be sure that in conjunction with writing code that adheres to these guidelines, someone can pick up your code and immediately understand it.
+Rather than commenting every line of code, add a code block at the top of the function. If there is a specific set of code that is especially complex, then you can comment line by line for that code only.
 
 Be verbose with your comments but ensure:
 
@@ -105,47 +83,22 @@ Be verbose with your comments but ensure:
 
 Don't leave commented out chunks of code in the codebase. It makes the code look unfinished, and can be confusing for other developers.
 
-### File naming
-
-- Don't use whitespaces in file names - they can lead to problems including text escaping and are harder to read when encoded in URLs
-
-- Use hyphens for word separators
-
-### Identify technical debt
-
-Use code comment annotations to mark parts of your code that require further work. This will allow the measurement and management of technical debt.
-
-Tag | Use
----: | --- | ---
-`@todo` |  document tasks to be completed
-`@optimise` | mark something that is working, but could be refactored
-
-Don't use `@fixme` (which defines things that are broken) - you shouldn't be committing broken code to the repo.
-
 ***
-## Styling with CSS & SASS
+## Styling with CSS
 
-Our approach to CSS is influenced by Nicole Sullivan's [OOCSS](http://oocss.org/) ideas, and Jonathan Snook's Scalable and Modular Architecture for CSS ([SMACSS](http://smacss.com/)), both of which advocate a general separation of concerns to promote re-usability and prevent code bloat.
+CSS should be modular and reusable. Its always best to extend off the existing code and overwrite the bits that need to be changed, than recreating the same styles over and over again.
 
 ### General Guidelines
 
-- Lint your SCSS according to the `scss-lint` configuration file found in the root of all cx projects
-
-- Promote scalable and modular css architecture using the principles defined in the SMACSS style guide
-
 - Utilise [BEM's](http://coding.smashingmagazine.com/2012/04/16/a-new-front-end-methodology-bem/) 'Block', 'Element', 'Modifier' methodology
 
-- Use classes rather than element selectors to de-couple CSS from HTML semantics and ensure that your code doesn't impact how it may be integrated into backend systems
+- Everything we do is responsive. Code needs to work and look good across all screen sizes, not just desktop and mobile.
 
-- Make layouts fluid, using variable units of measurement
-
-- Use `id` selectors only when explicitly required – they prohibit re-use, and may need to be re-written during systems integration
+- Use `id` selectors only when explicitly required – they prohibit re-use, and may need to be re-written during further code changes.
 
 - Use short hex values where applicable, e.g. `#fff` instead of `#ffffff`
 
-- Consider using `@warn` and `@debug` directives to aid development, especially within mixins
-
-- Use SCSS variables appropriately to ensure you code is kept DRY
+- Use CSS variables appropriately to ensure you code is kept DRY
 
     ```
     // no
@@ -154,10 +107,10 @@ Our approach to CSS is influenced by Nicole Sullivan's [OOCSS](http://oocss.org/
     }
 
     // yes
-    $white: #fff;
+    --color-white: #fff;
 
     h3 {
-      color: $white;
+      color: var(--color-white);
     }
 
     ```
@@ -169,24 +122,20 @@ Our approach to CSS is influenced by Nicole Sullivan's [OOCSS](http://oocss.org/
     h3,
     .gamma,
     %gamma {
-      @include font-size($h3-font-size);
-      line-height: $heading-line-height;
+      font-size: var(--h3-font-size);
+      line-height: var(--heading-line-height);
     }
 
-    // not so good
+    // not good
     h3, .gamma, %gamma {
-      @include font-size($h3-font-size);
-      line-height: $heading-line-height;
+      font-size: var(--h3-font-size);
+      line-height: var(--heading-line-height);
     }
     ```
 
 - Don't specify units for zero values, e.g. `margin: 0;` instead of `margin: 0px;`
 
 - Use `0` instead of `none`, e.g. `border: 0;` rather than `border: none;`.
-
-- If you use experimental properties that will require prefixing, it is recommended to use Autoprefixer to post-process the CSS. Autoprefixer can be combined with usage data from [caniuse](caniuse.com) to only output relevant prefixes (e.g., unless you're supporting really early versions of Chrome, you don't need `-webkit-border-radius`), which takes a lot of work out of manual prefixing, and is more intelligent than mixins and libraries.
-
-- Wherever possible, specific page-level styling should be avoided in favour of layout or component modifiers.
 
 - Avoid inline CSS.
 
@@ -206,15 +155,13 @@ Our approach to CSS is influenced by Nicole Sullivan's [OOCSS](http://oocss.org/
     margin: 0 0 20px;
     ```
 
-  It is worth noting that whilst the CSS generated by SASS can be outputted with optimisations applied, we cannot make assumptions about how the code we deliver will be used, and as such creating optimal optimal source code is preferred to relying on processors.
-
-- Write colours in lowercase:
+- Write colours in uppercase:
 
     ```
-    // no
+    // yes
     color: #1AB2C0
 
-    // yes
+    // no
     color: #1ab2c0
 
     ```
@@ -283,33 +230,13 @@ Don't over-specify CSS selectors. Overly specified selectors are difficult to un
 
 The above example is tightly coupled to the HTML structure which prevents re-use and is brittle - if the HTML needs changing, then the style will break.
 
-### Over qualification
-
-Don't qualify `id`s or classes with tag names.
-
-```
-// over qualified id selector
-ul#main-navigation {
-  ...
-}
-
-// over qualified class selector
-table.results {
-  ...
-}
-```
-
-As above, you will be binding site structure with presentation making the site harder to maintain and inhibit re-use.
-
-While we are at it, there is a case for reusing patterns of naming for things. 
-
 ### Commenting
 
 Use comments to:
 
 - Explain design or architectural decisions, to make notes so that any developers modifying, extending or debugging the code can do so understanding your original decisions.
 
-- Divide up groups of declarations using standard block and single line comment formats. (_If you have too many major sections in your partial, perhaps it should be more than one partial!_)
+- Divide up groups of declarations using standard block and single line comment formats.
 
     ```
     /*
@@ -318,39 +245,17 @@ Use comments to:
      * It often announces a new section of some kind
      */
     
-    /**
-     * This is a "block" comment carrying a bit more weight
-     * Maybe it has multiple lines
-     * It often announces a new section, perhaps a function
-     * This can be used in JS to denote a JSDoc block
-     * @see http://usejsdoc.org/about-getting-started.html#adding-documentation-comments-to-your-code
-     */
-
     // Single line explanation of something
     ```
-
-Use multiline comments if you want the comment to be preserved in the compiled CSS.
-
-```
-/* This comment is
- * several lines long.
- * since it uses the CSS comment syntax,
- * it will appear in the CSS output. */
-body { color: black; }
-```
-
 ### Unit sizing
 
 Use `rem`s to size fonts. These will take into account the user's font size setting ([this research from 2006 suggests around 10% of people have changed it](http://archive.oreilly.com/pub/post/more_statistics_on_user_clicks.html)). 
 
-
-Avoid the `font-size: 62.5%` hack to ensure that a `(r)em` unit equates to 10px. Never change the font size of the root element from its default of 100%/16px. Far more elements are 16px than 10px, so this way we have to specify the sizes of fewer things. This is where the cascade excels.
-
 Use unitless line-heights.
 
-If not using flexbox or css columns / grids, use percentages for fluid layouts and components.
+Use flexbox to create layouts and grids
 
-Use `ems` or `pixels` to specify the following properties unless percentages make sense (but as above, exercise good judgement): `margin`, `padding`, `top`, `left`, `bottom`, `right`.
+Use `pixels` to specify the following properties unless percentages make sense (but as above, exercise good judgement): `margin`, `padding`, `top`, `left`, `bottom`, `right`.
 
 ```
 //  This makes sense
@@ -365,20 +270,6 @@ Use `ems` or `pixels` to specify the following properties unless percentages mak
   top: 62px; // height of dropdown-toggle at present
 }
 
-// This makes sense
-// the inherited margin will take into account the font-size to ensure it looks 'right'
-.box {
-  margin-bottom: 3em;
-}
-
-//  This doesn't:
-.box {
-  margin-bottom: 6.33%; // converted from pixels on the mockup based on box height
-}
-```
-
-Use `box-sizing: border-box` globally. This makes dealing with multiple units in this fashion a lot nicer
-
 ***
 
 ## HTML Markup
@@ -387,19 +278,11 @@ Use `box-sizing: border-box` globally. This makes dealing with multiple units in
 
 - Use well-structured, semantic markup.
 
-- Use double quotes on all attributes. When using React.js for generating markup, we rely on single quotes.
+- Use double quotes on all attributes.
 
 - Use soft tabs, 2 space indents.
 
-- Ensure you write valid HTML.  Check using tools such as the [W3C Markup Validation Service](http://validator.w3.org/).
-
-- Do not omit [optional tags](http://www.whatwg.org/specs/web-apps/current-work/multipage/syntax.html#syntax-tag-omission).  It may be unclear whether a tag has been deliberately omitted, or if it has been left out accidentally.
-
-- Although unquoted attributes are supported, always quote attribute values.
-
-    ```
-    <input type=text class=form__field form__field--string /> <!-- uh oh -->
-    ```
+- Ensure you write valid HTML.
 
 - Omit protocols from external resources to prevent unintended security warnings through accidentally mixing protocols:
 
@@ -410,24 +293,6 @@ Use `box-sizing: border-box` globally. This makes dealing with multiple units in
     <!-- Do -->
     <script src="//www.google.com/js/gweb/analytics/autotrack.js"></script>
     ```
-
-### Doctype
-
-Use the HTML5 doctype to indicate that you are serving HTML5 content.  Using this doctype ensures your browser's layout engine uses 'standards' (or 'no-quirks') mode (rather than 'quirks' or 'almost-standard' modes).
-
-Any browsers that don't currently support HTML5 will enter this mode and interpret non-HTML5 in a compliant way whilst ignoring new, unsupported features.
-
-```
-<!DOCTYPE html>
-```
-
-### HTML tag 
-
-Add a `lang` attribute to set the default language. The lang attribute takes an ISO language code as its value. Typically this is a two letter code such as "en" for English, but it can also be an extended code such as "en-gb" for British English
-
-```
-<html lang="en">
-```
 
 ### Write semantic markup
 
@@ -473,10 +338,10 @@ Use the single word syntax for boolean attribute values to aid readability, redu
 The presence of the attribute itself implies that the value is "true", an absence implies a value of "false":
 
 ```
-// old hat
+// no
 <option selected="selected">value 1<option>
 
-// cutting edge
+// yes
 <option selected>value 1<option>
 ```
 
@@ -486,35 +351,11 @@ The presence of the attribute itself implies that the value is "true", an absenc
 
 ### General guidelines
 
-- We use React.js - jQuery has been superceded. Also, we prefer to make universal / isomorphic React applications
-
-- Use ES6 - Babel will transpile it.
+- Unless the site is already using jQuery, dont use it. Use vanilla Javascript instead.
 
 - Use soft-tabs with a two space indent.
 
-- Never use `eval`.
-
-- All projects will contain a `.jshintrc` file in the root.  This will define the expected coding standards for the project, enforced by JSHint. We are tending towards using the AirBnB preconfigured linting - `npm install --save-dev eslint-config-airbnb` and extend your .eslintrc file:
-
-```
-{
-    "parser": "babel-eslint",
-    "env": {
-        "browser": true,
-        "node": true
-    },
-    "extends": "airbnb",
-    "rules": {
-        "indent": [2, "tab"]
-    }
-}
-```
-
-- Don't use CoffeeScript - it's an abstraction too far. Javascript is far from a perfect language, but learn how to deal with the issues of Javascript using recognised and accepted patterns and adhere to best practice guidelines.
-
-- Typescript: totally open to being persuaded. Lots of people are drinking the Koolaid, present a business case.  
-
-- Avoid applying styles with Javascript, preferably add or remove classes.  Keep style in CSS to make it easier to maintain and debug.
+- Avoid applying styles with Javascript, it is better practice to add or remove classes.  Keep style in CSS to make it easier to maintain and debug.
 
     ```
     //  no good
@@ -528,13 +369,7 @@ The presence of the attribute itself implies that the value is "true", an absenc
     <span class="is-visually-hidden has-icon">Icon label text</span>
     ```
 
-- Opt in to using a restricted variant of JavaScript using `use strict` so that errors that should be thrown are.
-
-- Avoid inline Javascript in HTML markup.
-
 - Don't recreate functionality that may already be present in a utility library that is already in use.
-
-- Send data down the wire and theme on the client, rather than sending HTML when making AJAX requests.
 
 - Always use parentheses in blocks to aid readability:
 
@@ -585,7 +420,7 @@ The presence of the attribute itself implies that the value is "true", an absenc
 
     ```
 
-- Don't use `var` any more - we have `const` and `let` which Babel will compile as necessary. Favour `const` over `let` in ES6. In JavaScript, `const` means that the identifier can’t be reassigned. `let` is a signal that the variable may be reassigned, it also signals that the variable will be used only in the block it’s defined in.
+- Don't use `var` any more - use `let` In JavaScript, `const` means that the identifier can’t be reassigned. `let` is a signal that the variable may be reassigned, it also signals that the variable will be used only in the block it’s defined in.
 
 - single let pattern:
 
@@ -593,30 +428,14 @@ The presence of the attribute itself implies that the value is "true", an absenc
     // single let pattern:
     let mylet1 = 1,
         anotherlet2 = 'test',
-        andAnotherlet = true
-
-    // is this cool?
-    let mylet1 = 1,
-        anotherlet2 = 'test' // oops, Automatic Semicolon Insertion just popped a ; on this...
-        andAnotherlet = true; // is now global
-
-    // better?
-    let a = 1
-      , b = 2
-      , sum = a + b
-      , myobject = {}
-      , i
-      , j
+        andAnotherlet = true;
 
     // good old dependable multiple let pattern:
-    let myLet = 1
-    let anotherLet2 = 'test'
-    let andAnotherLet = true
+    let myLet = 1;
+    let anotherLet2 = 'test';
+    let andAnotherLet = true;
 
     ```
-
-### Don't use semi-colons - javascript doesn't require them
-
 ### Avoid excessive function arguments
 
 If a function requires more than three arguments, considering refactoring to use a configuration object:
@@ -648,9 +467,7 @@ Configuration objects:
 
 ### Naming conventions
 
-Although we can infer that `_oA` is a private object, we know nothing about what value it will contain.
-
-Use descriptive yet concise variable names for long-lived variables.
+Use descriptive yet concise variable names for long-lived variables e.g. `customer_name`
 
 Avoid using what might be considered reserved variable names out of context.  For example, `e` in javascript is considered an event object.  Don't use it for anything else.
 
@@ -681,26 +498,6 @@ Comment your code.  There are two reasons why you should comment:
     //  comment syntax.
 
     ```
-
-- For API documentation for users who want to use your libraries / plugins etc., without reading the code.  Use JSDoc standards to comment files and functions:
-
-    ```
-    /**
-     * @file A jQuery UI Widget to build product swatches
-     * @author Joel Mitchell
-     * @name $.cx.productSwatch
-     * @dependencies: jQuery, jQuery UI widget factory (mockjax for testing)
-     */
-    ```
-
-    ```
-    /**
-     * Event handler to close the menu
-     * @param {Event} e jQuery event object
-     */
-    var myFunction = function(e) {}
-    ```
-
 ### Break code into separate lines
 
 Where applicable, ensure code is written on separate lines to aid Git diffs and error reporting:
