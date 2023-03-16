@@ -1,8 +1,8 @@
-![CX Partners](https://www.cxpartners.co.uk/ui/img/logo.png)
+![Mind Yer Website](https://mindyerwebsite.co.uk/assets/img/mind_yer_app_primary_logo.svg)
 
 # Front-end Coding Standards and Best Practices
 
-a.k.a. *'How to do webdev at cxpartners'*.
+a.k.a. *'How to do webdev at Mind Yer Website'*.
 
 ## Overview
 
@@ -13,46 +13,29 @@ These guidelines, principles and standards allow us to:
 - produce code that is less prone to bugs and regressions, is easier to understand and debug
 - write code that supports re-use.
 
-It is required reading for all devs (internal and external) working on a cx web development project.
+It is required reading for all Front End devs working on a MYW project.
 
 ## Contributing
 
-When considering coding standards we're more interested in **consistency** than **developer freedom**. However this should be considered a living document – it will evolve to reflect the changing needs of the cx dev team and the work we do.
+When considering coding standards we're more interested in **consistency** than **developer freedom**. However this should be considered a living document – it will evolve to reflect the changing needs of the MYW FE dev team and the work we do.
 
 ### How to contribute
 
-- Those with access to the repo should create a `proposal/new-guideline` branch where the name reflects the addition or update.
-- Otherwise fork the repo and when ready create a pull request.
+- Branch the repo and submit your changes as a Pull Request. These changes will be reviewed by a senior developer, and if agreed, will be merged into the main branch
 
 ***
 
 ## Global Development Guidelines
 
-### Performance
-
-Page load times (both real and perceived) are a key consideration for users of all browsers and device types.
-
-There are some general things we can do in front-end development:
-
-- Send fewest bytes possible down the wire
-
-- Avoid unnecessary use of `display: none;`
-
-- Keep CSS selectors concise (be wary of SASS nesting)
-
-- Minimise HTTP requests
-
-- Minimise blocking – content should be readable before client side processing
-
-- Lazy load 'supplementary' content (especially images)
-
 ### Testing and QA should find no problems
 
+==
 - Code is a craft - make it your responsibility to ensure it is the best it can be; that it's tested, bug free, and adheres to these guidelines. Testing and QA folks aren't responsible for quality - developers are.
 
 - Don't use testers as bug catchers - testers should find no problems after you have committed your code.  When testers find bugs, tickets need to be opened, developers assigned and scheduled in to fix the problem.  This lengthens the time it takes from identifying to resolving a bug.
 
 - Make sure, as much as possible, you have tested your code on a reasonable number of devices so you can catch problems before you commit to the repo.
+==
 
 ### You are producing source code
 
