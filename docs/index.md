@@ -29,7 +29,7 @@ When considering coding standards we're more interested in **consistency** than 
 
 ### Testing and QA should find no problems
 
-== VERY IMPORTANT! Remember this above all else==
+==VERY IMPORTANT! Remember this above all else==
 
 - Code is a craft - make it your responsibility to ensure it is the best it can be; that it's tested, bug free, and adheres to these guidelines. Testing and QA folks aren't responsible for quality - developers are.
 
@@ -84,7 +84,7 @@ Be verbose with your comments but ensure:
 Don't leave commented out chunks of code in the codebase. It makes the code look unfinished, and can be confusing for other developers.
 
 ***
-## Styling with CSS
+# CSS
 
 CSS should be modular and reusable. Its always best to extend off the existing code and overwrite the bits that need to be changed, than recreating the same styles over and over again.
 
@@ -272,7 +272,7 @@ Use `pixels` to specify the following properties unless percentages make sense (
 
 ***
 
-## HTML Markup
+# HTML Markup
 
 ### General Guidelines
 
@@ -347,7 +347,7 @@ The presence of the attribute itself implies that the value is "true", an absenc
 
 ***
 
-## Behaviour & JS
+# JS
 
 ### General guidelines
 
@@ -510,3 +510,21 @@ Where applicable, ensure code is written on separate lines to aid Git diffs and 
 
      // not so good
     page.setViewport({width: 1280, height: 1024})
+
+
+***
+
+- Seperate into HTML, CSS, JS
+- Dont edit existing styles, overwrite so can be easily removed in future if needed
+- Never use inline styles. Styles should always go into a CSS file ( or if using Dawn, less than 3 styles can go into the "styles" block )
+- Proper testing - Check changes havnt affected anything else
+  - Browser testign
+  - What areas might your code have affected
+  - Check other elements that dont comply e.g. if you add/edit a metafield on the PDP, make sure to check products which dont have that metafield to make sure it still works
+  - Test all work in https://www.lambdatest.com/. Test latest versions of Chrome, IE, FF, Safari
+- Where a design is provided, testing needs to be done to check that the work you have done matches that design as closely as possible
+- Shopify specific rules
+- Github 
+  - Different edits to be done as different commits
+  - Each card on Trello is a seperate branch. 1 branch per card
+
