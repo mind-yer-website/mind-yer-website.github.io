@@ -144,12 +144,12 @@ These include if, for, while, switch, etc. Control statements should have one sp
 
 - Function declarations follow the "BSD/Allman style" 
 
-    function fooFunction($arg1, $arg2 = '') {
-      if (condition) {
-          statement;
-      }
-      return $val;
-    }    
+      function fooFunction($arg1, $arg2 = '') {
+        if (condition) {
+            statement;
+        }
+        return $val;
+      }    
 
 ### Function Calls
 
@@ -203,6 +203,61 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 # Laravel
 
 ### General guidelines
+
+- 
+
+### Naming Conventions
+
+  #### Controller
+
+  - Name should be in singular form.
+
+  - Should use PascalCase.
+
+      //correct
+      CustomerController.php
+
+      //not correct
+      CustomersController.php
+
+  #### Route URL
+
+    - Url should be in plural form.
+
+    - Can use kebab-case if there are two words in single part For best Practice.
+
+      //correct
+      /customers/25
+      /customers/password-reset
+
+      //not correct
+      customer/25
+      /customers/password_reset
+      /customers/passwordReset
+
+  #### Route Name
+
+    - Should use snake_case with dot notation.
+
+    - Better to use same name like in URL.
+
+      //correct
+      ->('customers.view')
+      ->('customers.password_reset')
+
+      //not correct
+      ->('customers-view')
+      ->('customers_view')
+      ->('customers.password.reset')
+      ->('customers.password-reset')
+      ->('customer-password-reset')
+
+  #### Functions
+
+    - Should use snake_case
+
+      //correct
+      function show_route()
 
 ***
 
