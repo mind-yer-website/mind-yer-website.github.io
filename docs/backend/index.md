@@ -155,7 +155,7 @@ These include if, for, while, switch, etc. Control statements should have one sp
 
 - Functions should be called with no spaces between the function name, the opening parenthesis, and the first parameter; spaces between commas and each parameter, and no space between the last parameter, the closing parenthesis, and the semicolon.
 
-    $var = foo($bar, $baz, $quux);
+      $var = foo($bar, $baz, $quux);
 
 ### Naming Conventions
 
@@ -165,7 +165,7 @@ These include if, for, while, switch, etc. Control statements should have one sp
 
 - Files should be named descriptively using lowercase letters. Hyphens should separate words.
 
-    my-plugin-name.php
+      my-plugin-name.php
 
 ### Commenting
 
@@ -175,9 +175,8 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 - Use single and double quotes when appropriate. If you’re not evaluating anything in the string, use single quotes. You should almost never have to escape quotes in a string, because you can just alternate your quoting style.
 
-    //example
-    echo '<a href="/static/link" class="button button-primary">Link name</a>';
-    echo "<a href='{$escaped_link}'>text with a ' single quote</a>";
+      echo '<a href="/static/link" class="button button-primary">Link name</a>';
+      echo "<a href='{$escaped_link}'>text with a ' single quote</a>";
 
 
 ### Writing include/require statements
@@ -186,12 +185,12 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 - It is strongly recommended to use require[_once] for unconditional includes. When using include[_once], PHP will throw a warning when the file is not found but will continue execution, which will almost certainly lead to other errors/warnings/notices being thrown if your application depends on the file loaded, potentially leading to security leaks. For that reason, require[_once] is generally the better choice as it will throw a Fatal Error if the file cannot be found.
 
-    // Correct.
-    require_once ABSPATH . 'file-name.php';
+      // Correct.
+      require_once ABSPATH . 'file-name.php';
 
-    // Incorrect.
-    include_once  ( ABSPATH . 'file-name.php' );
-    require_once     __DIR__ . '/file-name.php';
+      // Incorrect.
+      include_once  ( ABSPATH . 'file-name.php' );
+      require_once     __DIR__ . '/file-name.php';
 
 ### Remove Trailing Spaces
 
