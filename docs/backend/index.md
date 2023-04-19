@@ -175,6 +175,7 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 - Use single and double quotes when appropriate. If you’re not evaluating anything in the string, use single quotes. You should almost never have to escape quotes in a string, because you can just alternate your quoting style.
 
+    //example
     echo '<a href="/static/link" class="button button-primary">Link name</a>';
     echo "<a href='{$escaped_link}'>text with a ' single quote</a>";
 
