@@ -208,11 +208,11 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 ### Naming Conventions
 
-  #### Controller
+### Controller
 
-  - Name should be in singular form.
+- Name should be in singular form.
 
-  - Should use PascalCase.
+- Should use PascalCase.
 
       //correct
       CustomerController.php
@@ -220,11 +220,11 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
       //not correct
       CustomersController.php
 
-  #### Route URL
+### Route URL
 
-    - Url should be in plural form.
+  - Url should be in plural form.
 
-    - Can use kebab-case if there are two words in single part For best Practice.
+  - Can use kebab-case if there are two words in single part For best Practice.
 
       //correct
       /customers/25
@@ -235,11 +235,11 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
       /customers/password_reset
       /customers/passwordReset
 
-  #### Route Name
+### Route Name
 
-    - Should use snake_case with dot notation.
+  - Should use snake_case with dot notation.
 
-    - Better to use same name like in URL.
+  - Better to use same name like in URL.
 
       //correct
       ->('customers.view')
@@ -252,9 +252,9 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
       ->('customers.password-reset')
       ->('customer-password-reset')
 
-  #### Functions
+### Functions
 
-    - Should use snake_case
+  - Should use snake_case
 
       //correct
       function show_route()
