@@ -204,7 +204,9 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 ### General guidelines
 
-- 
+- use Laravel Horizon for Redis queues.
+
+- create Migration files for designing the database.
 
 ### Naming Conventions
 
@@ -259,6 +261,237 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
         //correct
         function show_route()
 
+### Methods
+
+  - Should use camelCase
+
+  - Must use single words related to action
+
+        //example
+        store()
+        delete()
+        show()
+        index()
+
+### Repositories directory
+
+  -  all functions that needs to connect with the model should be added here.
+
+  - please use BaseRepository.php file
+
+        <?php
+
+        namespace App\Repositories;
+
+        //Helpers
+        use Log;
+
+        class BaseRepository
+        {
+            const OPERATOR_AND = 'AND';
+            const OPERATOR_OR = 'OR';
+            const OPERATOR_LIKE = 'LIKE';
+
+            const OPERATOR_WHERE = 'where';
+            const OPERATOR_OR_WHERE = 'orWhere';
+
+            public $model;
+
+            public $class_type;
+
+            /**
+            * Store item
+            *
+            * @param array $parameter
+            * @return mixed
+            */
+            public function store(array $parameter)
+            {
+                try {
+                    $model = $this->model;
+
+                    return $model->create($parameter);
+
+                } catch(\Exception $e) {
+
+                    Log::error(__('messages.errors.store', ['description' => json_encode( $e->getMessage() ) ]));
+
+                    return false;
+                }
+            }
+
+            /**
+            * Insert items in bulk
+            *
+            * @param $items
+            * @return mixed
+            */
+            public function bulkInsert($items)
+            {
+                try {
+
+                    return $this->model->insert($items);
+
+                } catch (\Exception $e) {
+
+                    Log::error(__('messages.errors.bulk-store', [ 'description' => json_encode($e->getMessage()) ]));
+
+                    return false;
+
+                }
+            }
+
+            /**
+            * Update an item
+            *
+            * @param $id
+            * @param $parameters
+            * @return mixed
+            */
+            public function update($id, $parameters) {
+                
+                try {
+
+                    $item = $this->find($id);
+
+                    return $item->update($parameters);
+
+                } catch (\Exception $e) {
+
+                    Log::error(__('messages.errors.update', [ 'description' => json_encode($e->getMessage()) ]));
+
+                    return false;
+                }
+            }
+
+            /**
+            * Delete an item
+            *
+            * @param $id
+            * @return mixed
+            */
+            public function destroy($id) {
+
+                try {
+
+                    $item = $this->find($id);
+
+                    return $item->destroy();
+
+                } catch (\Exception $e) {
+
+                    Log::error(__('messages.errors.destroy', [ 'description' => json_encode($e->getMessage()) ]));
+
+                    return false;
+                }
+            }
+
+            /**
+            * Return all items
+            *
+            * @param array $select
+            * @param bool $array
+            * @return mixed
+            */
+            public function all($select = [], $array = false)
+            {
+                $model = $this->model;
+
+                if(!empty($select)) {
+                    $model->select($select);
+                }
+
+                return $array ?
+                    $model->get()->toArray()
+                    : $model->get();
+            }
+
+            /**
+            * Find item
+            *
+            * @param $id
+            * @return mixed
+            */
+            public function find($id)
+            {
+                return $this->model->find($id);
+            }
+
+            /**
+            * Queries model.
+            *
+            * $where = [
+            *   'field_name' => [
+            *      'value' => value
+            *      'operator' => operator
+            *      'where_type' => OperatorConstants::OPERATOR_WHERE or OperatorConstants::OPERATOR_OR_WHERE
+            *   ],
+            *   ... can add more ...
+            * ]
+            *
+            * Notes:
+            *   if 'operator' is LIKE, the value that would be passed
+            *   should have '%' depending on what the application needs.
+            *
+            * Additional info:
+            *   operator : optional
+            *   where_type : optional
+            *
+            * @param array $where
+            * @return model
+            */
+            public function findBy($where) {
+                $model = $this->model;
+
+                $model = $model->where(function ($query) use ($where) {
+
+                    foreach($where as $field => $value) {
+                        // get where type : orWhere() or where()
+                        $where_type = isset($value['where_type']) ? $value['where_type'] : self::OPERATOR_WHERE;
+
+                        // get the operator type
+                        $operator = isset($value['operator']) ? $value['operator'] : self::OPERATOR_AND;
+
+                        // get the value
+                        $val = isset($value['value']) ? $value['value'] : $value;
+
+                        // build query
+                        switch($operator) {
+
+                            case self::OPERATOR_AND:
+                            case self::OPERATOR_OR:
+                                $query->$where_type($field, $val);
+                                break;
+
+                            case self::OPERATOR_LIKE:
+                                $query->$where_type($field, 'LIKE', $val);
+                                break;
+
+                        }
+                    }
+                });
+
+                return $model;
+            }
+
+        }
+
+### Services directory
+
+  - all functions that use to call request to any API should be added here.
+
+  - Like the following:
+    - CheckoutService.php
+    - DraftOrderService.php
+    - OrderService.php
+    - ProductService.php
+
+***
+
+# Laravel Shopify Package
+
+- install Osiset Laravel Shopify package. [Link here](https://github.com/gnikyt/laravel-shopify/wiki/Installation)
+
 ***
 
 # Version Control
@@ -271,11 +504,15 @@ We use GitHub as our chosen VC system, as it has a native integration with Shopi
   - Different edits to be done as different commits
   - Each card on Trello is a seperate branch. 1 branch per card
 
+***
+
 # Testing
 - Proper testing - Check changes havnt affected anything else
   - Browser testign
   - What areas might your code have affected
   - Test all work in https://www.lambdatest.com/. Test latest versions of Chrome, IE, FF, Safari
+
+***
 
 # Coding Tools
 
