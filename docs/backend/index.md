@@ -226,14 +226,14 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
   - Can use kebab-case if there are two words in single part For best Practice.
 
-      //correct
-      /customers/25
-      /customers/password-reset
+        //correct
+        /customers/25
+        /customers/password-reset
 
-      //not correct
-      customer/25
-      /customers/password_reset
-      /customers/passwordReset
+        //not correct
+        customer/25
+        /customers/password_reset
+        /customers/passwordReset
 
 ### Route Name
 
@@ -241,23 +241,23 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
   - Better to use same name like in URL.
 
-      //correct
-      ->('customers.view')
-      ->('customers.password_reset')
+        //correct
+        ->('customers.view')
+        ->('customers.password_reset')
 
-      //not correct
-      ->('customers-view')
-      ->('customers_view')
-      ->('customers.password.reset')
-      ->('customers.password-reset')
-      ->('customer-password-reset')
+        //not correct
+        ->('customers-view')
+        ->('customers_view')
+        ->('customers.password.reset')
+        ->('customers.password-reset')
+        ->('customer-password-reset')
 
 ### Functions
 
   - Should use snake_case
 
-      //correct
-      function show_route()
+        //correct
+        function show_route()
 
 ***
 
