@@ -11,7 +11,7 @@ These guidelines, principles and standards allow us to:
 - produce code of a consistent quality across all projects we undertake
 - work concurrently with multiple devs on the same codebase at the same time in the same way
 - produce code that is less prone to bugs and regressions, is easier to understand and debug
-- write code that supports re-use.
+- write code that is easy to reuse, extend, and understand
 
 It is required reading for all Back-End devs working on a MYW project.
 
@@ -89,6 +89,15 @@ Be verbose with your comments but ensure:
 
 Don't leave commented out chunks of code in the codebase. It makes the code look unfinished, and can be confusing for other developers.
 
+
+### Unit Testing
+
+For every project that we undertake, writing unit tests is a requirement. These tests should be written to verify the functionality of the code, and should be written in such a way that they can be run automatically.
+
+Unit tests should be written to test the functionality of the code, not the code itself.  This means that if the code changes, the tests should still pass.
+
+
+
 ***
 
 # PHP
@@ -139,6 +148,14 @@ These include if, for, while, switch, etc. Control statements should have one sp
           break;
     }
 
+    // bad
+    if (condition1) {
+      return 1;
+    } elseif (condition2) {
+      return 2;
+    } else {
+      return default;
+    }
 
 ### Function Definitions
 
@@ -204,9 +221,9 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 ### General guidelines
 
-- use Laravel Horizon for Redis queues.
+- Use Laravel Horizon for Redis queues.
 
-- create Migration files for designing the database.
+- Design the database schema before writing the migrations file, using a tool like MySQL Workbench or https://dbdiagram.io/.
 
 ### Naming Conventions
 
@@ -221,6 +238,10 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
       //not correct
       CustomersController.php
+
+- Controllers should be as small and focused as possible.
+- Controllers should be easy to understand and maintain.
+- Use dependency injection to inject dependencies into controllers as this will make controllers more loosely coupled and easier to test.
 
 ### Route URL
 
@@ -254,30 +275,22 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
         ->('customers.password-reset')
         ->('customer-password-reset')
 
-### Functions
+### Functions / Methods
 
-  - Should use snake_case
+  - Should use snake_case or camelCase
+  - Should have a descriptive name that summarizes what the function does
 
-        //correct
-        function show_route()
-
-### Methods
-
-  - Should use camelCase
-
-  - Must use single words related to action
-
-        //example
-        store()
-        delete()
-        show()
-        index()
+          //correct
+          function show_route()
+          function showRoute()
 
 ### Repositories directory
 
-  -  all functions that needs to connect with the model should be added here.
+  - Repositories should be used to encapsulate the logic required to access data sources.
+  - Repositories are not required for every project, but if you find yourself repeating queries across multiple controllers, consider creating a repository.
+  - Use repositories by injecting them into the controller's constructor or method.
 
-  - please use BaseRepository.php file
+  - Sample of BaseRepository.php file
 
         <?php
 
@@ -478,19 +491,20 @@ C style comments (/* */) and standard C++ comments (//) are both fine. Use of Pe
 
 ### Services directory
 
-  - all functions that use to call request to any API should be added here.
+  - A service is a class that encapsulates a single unit of functionality. This functionality can then be reused by other parts of the application, making the code more modular and easier to maintain.
+  - A service class is also used for 3rd party integrations and other external api services.
 
   - Like the following:
     - CheckoutService.php
     - DraftOrderService.php
-    - OrderService.php
-    - ProductService.php
+    - ShopifyService.php
+    - GoogleService.php
 
 ***
 
 # Laravel Shopify Package
 
-- install Osiset Laravel Shopify package. [Link here](https://github.com/gnikyt/laravel-shopify/wiki/Installation)
+- install Osiset Laravel Shopify package. [Link here](https://github.com/Kyon147/laravel-shopify/wiki/Installation)
 
 ***
 
@@ -500,20 +514,33 @@ All coding done at MYW must be done under Version Control
 
 We use GitHub as our chosen VC system, as it has a native integration with Shopify
 
-- Github 
-  - Different edits to be done as different commits
-  - Each card on Trello is a seperate branch. 1 branch per card
+- Github
+  - For web applications, standard are 3 branches namely:
+    - Master - production branch, only working code
+    - Staging - staging branch, code that is ready to be tested by the client/customer
+    - Develop - development branch, code that is ready to be tested by the developer
+  - For Shopify projects, we will only use 2 branches namely:
+    - Master - production branch, only working code
+    - Develop - development branch, code that is ready to be tested by the developer and client/customer 
+  - For new projects, each functionality, process, or module should exist in a separate branch
+    - Branch naming convention: feature/branch-name
+    - Example: feature/checkout
+  - For bug fixes, each bug should exist in a separate branch
+    - Branch naming convention: bugfix/branch-name
+    - Example: bugfix/checkout
+  - All changes should create a pull request to the lead developer for review and approval
 
 ***
 
 # Testing
-- Proper testing - Check changes havnt affected anything else
+- Proper Application Testing is a must for all projects
   - Browser testing
   - PHP Unit Testing [Document Link Here](https://docs.google.com/document/d/1PFSdPzqR7SDTt_INtWRBU47kNCwGNfBm/edit)
-  - What areas might your code have affected
+  - Unit testing is a software testing method by which individual units of source code are tested to determine whether they are fit for use. A unit is the smallest testable part of an application. It may be an individual function or procedure.
   - Test all work in https://www.lambdatest.com/. Test latest versions of Chrome, IE, FF, Safari
 
 
 # Coding Tools
 
   - VS - Has a bunch of PHP Tools
+  - PHP Storm - is an IDE for PHP which can be a bit more powerful than VS, although it is a paid product.
